@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">phi</string>
+    <string name="xposed_description">Phigros 4.0.1 辅助与自动打歌插件</string>
+</resources>

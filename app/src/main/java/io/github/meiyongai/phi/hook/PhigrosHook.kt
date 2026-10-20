@@ -43,8 +43,20 @@ object PhigrosHook {
                 return@postDelayed
             }
 
-            Log.i(TAG, "初始化 Phigros 悬浮控制器与内存修补引擎")
+            Log.i(TAG, "初始化持久化配置、Phigros 悬浮控制器与内存修补引擎")
+            io.github.meiyongai.phi.config.ConfigManager.initialize(activity)
             MemoryPatcher.initialize()
+
+            // 依照已保存的持久化配置自动激活对应补丁
+            if (io.github.meiyongai.phi.config.ConfigManager.isAutoPlayEnabled()) {
+                MemoryPatcher.setAutoPlayEnabled(true)
+            }
+            if (io.github.meiyongai.phi.config.ConfigManager.isFreePurchaseEnabled()) {
+                MemoryPatcher.setFreePurchaseEnabled(true)
+            }
+            if (io.github.meiyongai.phi.config.ConfigManager.isFastPassEnabled()) {
+                MemoryPatcher.setFastPassEnabled(true)
+            }
 
             val windowManager = FloatWindowManager(activity)
             windowManager.attach()

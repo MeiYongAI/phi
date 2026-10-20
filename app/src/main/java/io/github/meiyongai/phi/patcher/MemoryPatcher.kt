@@ -7,6 +7,8 @@ import com.sun.jna.Pointer
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 /**
  * 补丁注入目标描述结构体
@@ -25,7 +27,7 @@ data class PatchEntry(
  * Phigros 原生内存补丁管理器
  *
  * 负责解析游戏进程内部 libil2cpp.so 动态链接库的内存加载基地址，
- * 并提供全自动打歌（AutoPlay）的原生热修补机制。
+ * 并提供全自动打歌（AutoPlay）与零元购的原生热修补机制。
  */
 object MemoryPatcher {
 
@@ -40,143 +42,34 @@ object MemoryPatcher {
     private const val PROT_WRITE = 2
     private const val PROT_EXEC = 4
 
-    /**
-     * ARM64 指令：NOP 空指令 (0x1F2003D5)
-     */
-    /**
-     * ARM64 指令：NOP 空指令 (0xD503201F)
-     */
-    private val ARM64_NOP = byteArrayOf(
-        0x1F.toByte(), 0x20.toByte(), 0x03.toByte(), 0xD5.toByte()
-    )
+    /** ARM64 指令按小端编码，表中保留指令字，避免手工拆分字节。 */
+    private fun arm64(vararg instructions: Long): ByteArray =
+        ByteBuffer.allocate(instructions.size * Int.SIZE_BYTES)
+            .order(ByteOrder.LITTLE_ENDIAN)
+            .apply { instructions.forEach { putInt(it.toInt()) } }
+            .array()
 
-    /**
-     * ARM64 指令：FMOV S9, S8 浮点寄存器直通复制 (0x1E204109)
-     * 取消 Hold 头部判定时对时差的取绝对值操作，保留带符号时差 realTime - nowTime
-     */
-    private val PATCH_FMOV_S9_S8 = byteArrayOf(
-        0x09.toByte(), 0x41.toByte(), 0x20.toByte(), 0x1E.toByte()
-    )
-
-    /**
-     * ARM64 指令：FMOV S0, WZR 载入 0.0 单精度浮点零值 (0x1E2703E0)
-     * 将判定基准时间窗口严格归零收窄至 0.0s 触线理论值时刻
-     */
-    private val PATCH_FMOV_S0_WZR = byteArrayOf(
-        0xE0.toByte(), 0x03.toByte(), 0x27.toByte(), 0x1E.toByte()
-    )
-
-    /**
-     * ARM64 指令：FMOV S2, WZR 载入 0.0 单精度浮点零值 (0x1E2703E2)
-     * 将 Flick 判定基准时间窗口严格归零收窄至 0.0s 触线理论值时刻
-     */
-    private val PATCH_FMOV_S2_WZR = byteArrayOf(
-        0xE2.toByte(), 0x03.toByte(), 0x27.toByte(), 0x1E.toByte()
-    )
-
-    /**
-     * ClickControl.Judge 浮点时间守卫指令块 (12 字节)
-     *
-     * 位于 0x1D821E0，替换原 TST W8,#0xFF / STRB W8,[X19,#0x60] / B.EQ loc_1D822CC 三条指令：
-     *   FMOV S0, WZR       ; 载入 0.0 作为比较基准
-     *   FCMP S9, S0        ; 比较 S9 = realTime - nowTime 与 0.0
-     *   B.GT loc_1D822CC   ; 音符未到判定线 (S9 > 0) 则跳转等待，已到则顺延
-     * 保留后续 0x1D821EC LDR X0,[X20] 原始 ScoreControl 初始化路径。
-     */
-    private val PATCH_CLICK_TIMEGUARD = byteArrayOf(
-        0xE0.toByte(), 0x03.toByte(), 0x27.toByte(), 0x1E.toByte(),  // FMOV S0, WZR
-        0x20.toByte(), 0x21.toByte(), 0x20.toByte(), 0x1E.toByte(),  // FCMP S9, S0
-        0x2C.toByte(), 0x07.toByte(), 0x00.toByte(), 0x54.toByte()   // B.GT loc_1D822CC (imm19=57)
-    )
-
-    /**
-     * ARM64 指令：FMOV S8, WZR 载入 0.0 单精度浮点零值 (0x1E2703E8)
-     * 取消 FABS S8,S9 对时差取绝对值，使后续 FCMP S8,S0 始终给出 Equal，
-     * 配合 LoadZero 与 PassThrough 将判定强制落在 Perfect 分支。
-     */
-    private val PATCH_FMOV_S8_WZR = byteArrayOf(
-        0xE8.toByte(), 0x03.toByte(), 0x27.toByte(), 0x1E.toByte()   // FMOV S8, WZR
-    )
-
-    /**
-     * HoldControl.Judge 头部未到判定线时重定向跳转到等待分支 (b.pl 0x01D83EBC，指令码 0x54001325)
-     */
-    private val PATCH_HOLD_HEAD_REDIRECT_WAIT = byteArrayOf(
-        0x25.toByte(), 0x13.toByte(), 0x00.toByte(), 0x54.toByte()
-    )
-
-    /**
-     * HoldControl.Judge 重置 isHoldBroken 字段 (0x3901827F)
-     */
-    private val PATCH_STRB_WZR_X19_8D = byteArrayOf(
-        0x7F.toByte(), 0x82.toByte(), 0x01.toByte(), 0x39.toByte()
-    )
-
-    /**
-     * HoldControl.Judge 身体检测入口重定向跳转到尾部结算 (b 0x01D83F98，指令码 0x1400002E)
-     */
-    private val PATCH_HOLD_BODY_SKIP_TO_TAIL = byteArrayOf(
-        0x2E.toByte(), 0x00.toByte(), 0x00.toByte(), 0x14.toByte()
-    )
-
-    /**
-     * Phigros 4.0.1 (arm64-v8a) 零误差理论值自动打歌（Zero-Error AutoPlay）注入表
-     */
+    // Phigros 4.0.1 arm64：直接调整原生 Judge 的时间与命中分支。
+    // 仅切换开关时写入/还原；不挂钩 Update，也不遍历音符列表。
     private val autoPlayEntries = listOf(
-        PatchEntry("ClickControl.TimeGuard",    0x1D821E0L, PATCH_CLICK_TIMEGUARD),
-        PatchEntry("ClickControl.NoFabs",        0x1D821F0L, PATCH_FMOV_S8_WZR),
-        PatchEntry("ClickControl.LoadZero",      0x1D82208L, PATCH_FMOV_S0_WZR),
-        PatchEntry("ClickControl.PassThrough",   0x1D82210L, ARM64_NOP),
-        PatchEntry(
-            name = "DragControl.LoadZero",
-            rva = 0x1D829ECL,
-            patchBytes = PATCH_FMOV_S0_WZR
-        ),
-        PatchEntry(
-            name = "DragControl.PassThrough",
-            rva = 0x1D82A00L,
-            patchBytes = ARM64_NOP
-        ),
-        PatchEntry(
-            name = "FlickControl.LoadZero",
-            rva = 0x1D82F64L,
-            patchBytes = PATCH_FMOV_S2_WZR
-        ),
-        PatchEntry(
-            name = "FlickControl.PassThrough",
-            rva = 0x1D82F80L,
-            patchBytes = ARM64_NOP
-        ),
-        PatchEntry(
-            name = "HoldControl.HeadPassThrough",
-            rva = 0x1D83C30L,
-            patchBytes = ARM64_NOP
-        ),
-        PatchEntry(
-            name = "HoldControl.NoFabs",
-            rva = 0x1D83C38L,
-            patchBytes = PATCH_FMOV_S9_S8
-        ),
-        PatchEntry(
-            name = "HoldControl.LoadZero",
-            rva = 0x1D83C50L,
-            patchBytes = PATCH_FMOV_S0_WZR
-        ),
-        PatchEntry(
-            name = "HoldControl.HeadRedirectWait",
-            rva = 0x1D83C58L,
-            patchBytes = PATCH_HOLD_HEAD_REDIRECT_WAIT
-        ),
-        PatchEntry(
-            name = "HoldControl.PreventBroken",
-            rva = 0x1D83EDCL,
-            patchBytes = PATCH_STRB_WZR_X19_8D
-        ),
-        PatchEntry(
-            name = "HoldControl.BodySkipToTail",
-            rva = 0x1D83EE0L,
-            patchBytes = PATCH_HOLD_BODY_SKIP_TO_TAIL
-        )
+        // Click：未到线时等待；到线后保留原初始化路径并进入 Perfect。
+        PatchEntry("ClickControl.TimeGuard", 0x1D821E0L,
+            arm64(0x1E2703E0, 0x1E202120, 0x5400072C)), // fmov s0,wzr; fcmp s9,s0; b.gt wait
+        PatchEntry("ClickControl.NoFabs", 0x1D821F0L, arm64(0x1E2703E8)), // fmov s8,wzr
+        PatchEntry("ClickControl.LoadZero", 0x1D82208L, arm64(0x1E2703E0)), // fmov s0,wzr
+        PatchEntry("ClickControl.PassThrough", 0x1D82210L, arm64(0xD503201F)), // nop
+        // Drag / Flick：到线后判定，不依赖触摸命中标志。
+        PatchEntry("DragControl.LoadZero", 0x1D829ECL, arm64(0x1E2703E0)),
+        PatchEntry("DragControl.PassThrough", 0x1D82A00L, arm64(0xD503201F)),
+        PatchEntry("FlickControl.LoadZero", 0x1D82F64L, arm64(0x1E2703E2)), // fmov s2,wzr
+        PatchEntry("FlickControl.PassThrough", 0x1D82F80L, arm64(0xD503201F)),
+        // Hold：头部按带符号时差等待，身体保持，尾部使用原生结算。
+        PatchEntry("HoldControl.HeadPassThrough", 0x1D83C30L, arm64(0xD503201F)),
+        PatchEntry("HoldControl.NoFabs", 0x1D83C38L, arm64(0x1E204109)), // fmov s9,s8
+        PatchEntry("HoldControl.LoadZero", 0x1D83C50L, arm64(0x1E2703E0)),
+        PatchEntry("HoldControl.HeadRedirectWait", 0x1D83C58L, arm64(0x54001325)), // b.pl wait
+        PatchEntry("HoldControl.PreventBroken", 0x1D83EDCL, arm64(0x3901827F)), // strb wzr,[x19,#0x8d]
+        PatchEntry("HoldControl.BodySkipToTail", 0x1D83EE0L, arm64(0x1400002E)) // b tail
     )
 
     /**
@@ -207,10 +100,47 @@ object MemoryPatcher {
         )
     )
 
+    /**
+     * 一键通关与满分结算（Fast Pass）注入表
+     *
+     * 针对打歌流程与成绩快照执行原生链路重定向：
+     * 1. ProgressControl.BypassAudioWait (RVA: 0x1D86174):
+     *    移除全曲播放等待分支 (NOP)，直接进入关卡收尾逻辑；
+     * 2. ProgressControl.BypassCanLevelOver (RVA: 0x1D86184):
+     *    移除 canLevelOver 限制条件 (NOP)，停止音频播放并标记 levelOver = true；
+     * 3. ProgressControl.SetOverTimeDirectly (RVA: 0x1D861C8):
+     *    将关卡结束计时器直接赋为 3.5f (FMOV S0, #3.5)，当帧满足条件并触发原生 LevelOver 结算协程；
+     * 4. ScoreControl.InstantPhiResult (RVA: 0x1D8646C):
+     *    从关联的 LevelInformation 中动态提取该谱面实际总音符数，直接向 LevelResultInfo
+     *    注入 1000000 分、达成率 100%、全连击（All Perfect / Full Combo）且各项判定精准匹配的数据。
+     */
+    private val fastPassEntries = listOf(
+        PatchEntry("ProgressControl.BypassAudioWait", 0x1D86174L, arm64(0xD503201F)),
+        PatchEntry("ProgressControl.BypassCanLevelOver", 0x1D86184L, arm64(0xD503201F)),
+        PatchEntry("ProgressControl.SetOverTimeDirectly", 0x1D861C8L, arm64(0x1E219000)),
+        PatchEntry("ScoreControl.InstantPhiResult", 0x1D8646CL, arm64(
+            0xF9401A68, // ldr x8, [x19, #0x30] (levelInformation)
+            0xB9402D08, // ldr w8, [x8, #0x2c]  (numOfNotes)
+            0x52848009, // movz w9, #0x2400
+            0x72A92E89, // movk w9, #0x4974, lsl #16 (float 1000000.0f)
+            0x5288480A, // movz w10, #0x4240
+            0x72A001EA, // movk w10, #0xf, lsl #16   (int 1000000)
+            0x2902268A, // stp w10, w9, [x20, #0x10] (IntScore, score)
+            0x52A7F009, // movz w9, #0x3f80, lsl #16 (float 1.0f)
+            0x29032289, // stp w9, w8, [x20, #0x18]  (percent, perfect = numOfNotes)
+            0xF900129F, // str xzr, [x20, #0x20]     (good = 0, bad = 0)
+            0xF900169F, // str xzr, [x20, #0x28]     (miss = 0, early = 0)
+            0x2906229F, // stp wzr, w8, [x20, #0x30] (late = 0, maxCombo = numOfNotes)
+            0xD503201F, // nop
+            0xD503201F  // nop
+        ))
+    )
+
     private val originalByteBackups = mutableMapOf<Long, ByteArray>()
     private var baseAddress: Long = 0L
     private var isAutoPlayApplied: Boolean = false
     private var isFreePurchaseApplied: Boolean = false
+    private var isFastPassApplied: Boolean = false
 
     /**
      * JNA 绑定的 POSIX 标准 C 运行时接口
@@ -225,6 +155,7 @@ object MemoryPatcher {
          * @return 成功返回 0，失败返回 -1
          */
         fun mprotect(addr: Pointer, len: Long, prot: Int): Int
+        fun mmap(addr: Pointer?, len: Long, prot: Int, flags: Int, fd: Int, offset: Long): Pointer
 
         companion object {
             val INSTANCE: CLibrary by lazy {
@@ -234,9 +165,10 @@ object MemoryPatcher {
     }
 
     /**
-     * 解析 /proc/self/maps 获取目标动态链接库的内存加载基地址
+     * 解析 /proc/self/maps 获取目标动态链接库的真正加载基地址
      *
-     * 遍历当前进程的虚拟内存映射表，定位指定动态库并提取其第一个代码段的绝对加载基地址。
+     * 遍历当前进程虚拟内存映射表，过滤孤立的只读映射片段，通过识别具有完整可执行代码段 (r-xp)
+     * 的有效映射结构，提取该动态链接库运行主体的真正加载起始基地址。
      *
      * Args:
      *     soName (String): 目标动态链接库文件名（如 libil2cpp.so）。
@@ -254,18 +186,43 @@ object MemoryPatcher {
             return 0L
         }
 
+        var candidateBase = 0L
         BufferedReader(FileReader(mapsFile)).use { reader ->
             var line: String?
             while (reader.readLine().also { line = it } != null) {
                 val currentLine = line ?: continue
-                if (currentLine.contains(soName)) {
-                    val addressRange = currentLine.split(" ")[0]
-                    val startAddrHex = addressRange.split("-")[0]
-                    val parsedAddress = java.lang.Long.parseUnsignedLong(startAddrHex, 16)
-                    Log.i(TAG, "定位到 $soName 基地址: 0x${java.lang.Long.toHexString(parsedAddress)}")
-                    return parsedAddress
+                if (!currentLine.contains(soName)) {
+                    continue
+                }
+
+                val tokens = currentLine.trim().split("\\s+".toRegex())
+                if (tokens.size < 5) continue
+
+                val addressRange = tokens[0]
+                val perms = tokens[1]
+                val offset = tokens[2]
+                val startAddrHex = addressRange.split("-")[0]
+                val startAddr = java.lang.Long.parseUnsignedLong(startAddrHex, 16)
+
+                if (offset == "00000000" && perms.startsWith("r")) {
+                    candidateBase = startAddr
+                }
+
+                if (perms.contains("x") && candidateBase != 0L) {
+                    val endAddrHex = addressRange.split("-")[1]
+                    val endAddr = java.lang.Long.parseUnsignedLong(endAddrHex, 16)
+                    val segSize = endAddr - startAddr
+                    if (segSize > 1024 * 1024) {
+                        Log.i(TAG, "定位到有效 $soName 执行体基地址: 0x${java.lang.Long.toHexString(candidateBase)}")
+                        return candidateBase
+                    }
                 }
             }
+        }
+
+        if (candidateBase != 0L) {
+            Log.i(TAG, "回退使用候选 $soName 基地址: 0x${java.lang.Long.toHexString(candidateBase)}")
+            return candidateBase
         }
 
         Log.e(TAG, "未能在 /proc/self/maps 中找到目标动态链接库: $soName")
@@ -285,10 +242,11 @@ object MemoryPatcher {
      *     - `PhigrosHook.onGameActivityCreated`: 游戏主 Activity 挂载就绪后调用。
      *     - `MemoryPatcher.setAutoPlayEnabled`: 切换自动打歌前确保就绪。
      *     - `MemoryPatcher.setFreePurchaseEnabled`: 切换零元购前确保就绪。
+     *     - `MemoryPatcher.setFastPassEnabled`: 切换一键通关前确保就绪。
      */
     @Synchronized
     fun initialize(): Boolean {
-        val totalExpectedBackups = autoPlayEntries.size + freePurchaseEntries.size
+        val totalExpectedBackups = autoPlayEntries.size + freePurchaseEntries.size + fastPassEntries.size
         if (baseAddress != 0L && originalByteBackups.size == totalExpectedBackups) {
             return true
         }
@@ -299,8 +257,7 @@ object MemoryPatcher {
             return false
         }
 
-        val allEntries = autoPlayEntries + freePurchaseEntries
-        for (entry in allEntries) {
+        for (entry in autoPlayEntries + freePurchaseEntries + fastPassEntries) {
             val targetAddr = baseAddress + entry.rva
             if (!originalByteBackups.containsKey(targetAddr)) {
                 val pointer = Pointer(targetAddr)
@@ -333,7 +290,7 @@ object MemoryPatcher {
         val ret = CLibrary.INSTANCE.mprotect(Pointer(pageStart), totalLength, prot)
         if (ret != 0) {
             val errno = Native.getLastError()
-            Log.e(TAG, "mprotect 失败: address=0x${java.lang.Long.toHexString(address)}, errno=$errno")
+            error("mprotect 失败: address=0x${java.lang.Long.toHexString(address)}, errno=$errno")
         }
     }
 
@@ -357,6 +314,7 @@ object MemoryPatcher {
         val pointer = Pointer(targetAddress)
         pointer.write(0, data, 0, data.size)
         setMemoryProtection(targetAddress, data.size.toLong(), readExec)
+        InstructionCache.flush(targetAddress, data.size)
     }
 
     /**
@@ -387,7 +345,7 @@ object MemoryPatcher {
     }
 
     /**
-     * 切换自动打歌功能的开启或关闭状态
+     * 切换自动打歌补丁
      *
      * Args:
      *     enabled (Boolean): true 为开启自动打歌，false 为恢复原版逻辑。
@@ -405,9 +363,7 @@ object MemoryPatcher {
             return false
         }
 
-        if (isAutoPlayApplied == enabled) {
-            return isAutoPlayApplied
-        }
+        if (isAutoPlayApplied == enabled) return isAutoPlayApplied
 
         applyPatchEntries(autoPlayEntries, enabled)
         isAutoPlayApplied = enabled
@@ -416,7 +372,7 @@ object MemoryPatcher {
     }
 
     /**
-     * 查询当前自动打歌补丁是否处于激活状态
+     * 查询自动打歌补丁状态
      *
      * Returns:
      *     Boolean: true 为已开启，false 为未开启。
@@ -471,5 +427,55 @@ object MemoryPatcher {
      */
     fun isFreePurchaseEnabled(): Boolean {
         return isFreePurchaseApplied
+    }
+
+    /**
+     * 切换一键通关（满分跳过）功能的开启或关闭状态
+     *
+     * 当开启时，在打歌开始后直接跳过全曲演奏过程，并根据该谱面总音符数自动构造
+     * 满分且无失误的结算结果，触发游戏原生结算并持久化写入本地存档；
+     * 当关闭时，还原原生打歌与判定流程。
+     *
+     * Args:
+     *     enabled (Boolean): 目标开关状态，true 为开启一键通关，false 为恢复原版逻辑。
+     *
+     * Returns:
+     *     Boolean: 实际执行操作后的当前状态。
+     *
+     * Callers:
+     *     - `PhigrosHook.onGameActivityCreated`: 启动时根据持久化配置恢复状态。
+     *     - `FloatPanelView.init`: 响应悬浮面板中一键通关开关的交互变更。
+     */
+    @Synchronized
+    fun setFastPassEnabled(enabled: Boolean): Boolean {
+        if (!initialize()) {
+            Log.e(TAG, "初始化失败，无法切换一键通关状态")
+            return false
+        }
+
+        if (isFastPassApplied == enabled) {
+            return isFastPassApplied
+        }
+
+        applyPatchEntries(fastPassEntries, enabled)
+        isFastPassApplied = enabled
+        Log.i(TAG, "已更新一键通关状态: enabled=$enabled")
+        return isFastPassApplied
+    }
+
+    /**
+     * 查询当前一键通关补丁是否处于激活状态
+     *
+     * Args:
+     *     无
+     *
+     * Returns:
+     *     Boolean: true 为已开启，false 为未开启。
+     *
+     * Callers:
+     *     - `FloatPanelView.init`: 悬浮面板展开时同步一键通关开关的当前状态。
+     */
+    fun isFastPassEnabled(): Boolean {
+        return isFastPassApplied
     }
 }

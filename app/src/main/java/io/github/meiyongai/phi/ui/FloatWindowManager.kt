@@ -15,6 +15,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
+import io.github.meiyongai.phi.config.ConfigManager
 
 /**
  * 游戏内悬浮交互窗口管理器
@@ -35,8 +36,8 @@ class FloatWindowManager(private val activity: Activity) {
     private val panelView: FloatPanelView
 
     private var isPanelExpanded: Boolean = false
-    private var isSecureEnabled: Boolean = false
-    private var bubbleAlpha: Float = 0.85f
+    private var isSecureEnabled: Boolean = ConfigManager.isSecureScreenEnabled()
+    private var bubbleAlpha: Float = ConfigManager.getBubbleAlpha()
 
     init {
         // 构建悬浮球视图：半透明圆形质感按钮
@@ -82,6 +83,7 @@ class FloatWindowManager(private val activity: Activity) {
             height = dpToPx(52)
             x = dpToPx(20)
             y = dpToPx(120)
+            alpha = bubbleAlpha
         }
 
         // 悬浮球拖拽与点击判定
@@ -106,6 +108,10 @@ class FloatWindowManager(private val activity: Activity) {
             gravity = Gravity.CENTER
             width = dpToPx(300)
             height = WindowManager.LayoutParams.WRAP_CONTENT
+        }
+
+        if (isSecureEnabled) {
+            setSecureScreenEnabled(true)
         }
     }
 

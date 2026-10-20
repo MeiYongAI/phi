@@ -12,13 +12,14 @@ import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.Switch
 import android.widget.TextView
+import io.github.meiyongai.phi.config.ConfigManager
 import io.github.meiyongai.phi.patcher.MemoryPatcher
 
 /**
  * 游戏内控制面板视图
  *
  * 以纯代码方式构建现代暗色半透明风格的控制面板，
- * 负责提供自动打歌功能切换、防截屏录屏保护开关以及悬浮按钮外观调节等交互功能。
+ * 负责提供自动打歌功能切换、一键通关切换、防截屏录屏保护开关以及悬浮按钮外观调节等交互功能。
  *
  * @param context 当前运行宿主的上下文环境
  * @param windowManager 悬浮窗管理器，用于协同状态变更
@@ -30,6 +31,7 @@ class FloatPanelView(
 ) : LinearLayout(context) {
 
     private val autoPlaySwitch: Switch
+    private val fastPassSwitch: Switch
     private val freePurchaseSwitch: Switch
     private val secureScreenSwitch: Switch
     private val alphaSeekBar: SeekBar
@@ -103,9 +105,23 @@ class FloatPanelView(
             isChecked = MemoryPatcher.isAutoPlayEnabled()
             setOnCheckedChangeListener { _, isChecked ->
                 MemoryPatcher.setAutoPlayEnabled(isChecked)
+                ConfigManager.setAutoPlayEnabled(isChecked)
             }
         }
         addView(createRowContainer(autoPlaySwitch))
+
+        // 一键通关开关行
+        fastPassSwitch = Switch(context).apply {
+            text = "一键通关"
+            setTextColor(Color.WHITE)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+            isChecked = MemoryPatcher.isFastPassEnabled()
+            setOnCheckedChangeListener { _, isChecked ->
+                MemoryPatcher.setFastPassEnabled(isChecked)
+                ConfigManager.setFastPassEnabled(isChecked)
+            }
+        }
+        addView(createRowContainer(fastPassSwitch))
 
         // 零元购开关行
         freePurchaseSwitch = Switch(context).apply {
@@ -115,6 +131,7 @@ class FloatPanelView(
             isChecked = MemoryPatcher.isFreePurchaseEnabled()
             setOnCheckedChangeListener { _, isChecked ->
                 MemoryPatcher.setFreePurchaseEnabled(isChecked)
+                ConfigManager.setFreePurchaseEnabled(isChecked)
             }
         }
         addView(createRowContainer(freePurchaseSwitch))
@@ -127,6 +144,7 @@ class FloatPanelView(
             isChecked = windowManager.isSecureScreenEnabled()
             setOnCheckedChangeListener { _, isChecked ->
                 windowManager.setSecureScreenEnabled(isChecked)
+                ConfigManager.setSecureScreenEnabled(isChecked)
             }
         }
         addView(createRowContainer(secureScreenSwitch))
@@ -154,6 +172,9 @@ class FloatPanelView(
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                     val alpha = (progress.coerceAtLeast(20)) / 100f
                     windowManager.setBubbleAlpha(alpha)
+                    if (fromUser) {
+                        ConfigManager.setBubbleAlpha(alpha)
+                    }
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {}

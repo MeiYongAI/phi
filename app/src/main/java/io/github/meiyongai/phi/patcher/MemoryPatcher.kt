@@ -49,50 +49,51 @@ object MemoryPatcher {
             .apply { instructions.forEach { putInt(it.toInt()) } }
             .array()
 
-    // Phigros 4.0.1 arm64：直接调整原生 Judge 的时间与命中分支。
+    // Phigros 4.0.1.2 (versionCode 160) arm64：直接调整原生 Judge 的时间与命中分支。
+    // libil2cpp.so SHA-256: c5f6d6b72658ab6d5f03d3d11a63b47778c54d4b93871422218d6a75f7b4a10f
     // 仅切换开关时写入/还原；不挂钩 Update，也不遍历音符列表。
     private val autoPlayEntries = listOf(
         // Click：未到线时等待；到线后保留原初始化路径并进入 Perfect。
-        PatchEntry("ClickControl.TimeGuard", 0x1D821E0L,
+        PatchEntry("ClickControl.TimeGuard", 0x1D848ECL,
             arm64(0x1E2703E0, 0x1E202120, 0x5400072C)), // fmov s0,wzr; fcmp s9,s0; b.gt wait
-        PatchEntry("ClickControl.NoFabs", 0x1D821F0L, arm64(0x1E2703E8)), // fmov s8,wzr
-        PatchEntry("ClickControl.LoadZero", 0x1D82208L, arm64(0x1E2703E0)), // fmov s0,wzr
-        PatchEntry("ClickControl.PassThrough", 0x1D82210L, arm64(0xD503201F)), // nop
+        PatchEntry("ClickControl.NoFabs", 0x1D848FCL, arm64(0x1E2703E8)), // fmov s8,wzr
+        PatchEntry("ClickControl.LoadZero", 0x1D84914L, arm64(0x1E2703E0)), // fmov s0,wzr
+        PatchEntry("ClickControl.PassThrough", 0x1D8491CL, arm64(0xD503201F)), // nop
         // Drag / Flick：到线后判定，不依赖触摸命中标志。
-        PatchEntry("DragControl.LoadZero", 0x1D829ECL, arm64(0x1E2703E0)),
-        PatchEntry("DragControl.PassThrough", 0x1D82A00L, arm64(0xD503201F)),
-        PatchEntry("FlickControl.LoadZero", 0x1D82F64L, arm64(0x1E2703E2)), // fmov s2,wzr
-        PatchEntry("FlickControl.PassThrough", 0x1D82F80L, arm64(0xD503201F)),
+        PatchEntry("DragControl.LoadZero", 0x1D850F8L, arm64(0x1E2703E0)),
+        PatchEntry("DragControl.PassThrough", 0x1D8510CL, arm64(0xD503201F)),
+        PatchEntry("FlickControl.LoadZero", 0x1D85670L, arm64(0x1E2703E2)), // fmov s2,wzr
+        PatchEntry("FlickControl.PassThrough", 0x1D8568CL, arm64(0xD503201F)),
         // Hold：头部按带符号时差等待，身体保持，尾部使用原生结算。
-        PatchEntry("HoldControl.HeadPassThrough", 0x1D83C30L, arm64(0xD503201F)),
-        PatchEntry("HoldControl.NoFabs", 0x1D83C38L, arm64(0x1E204109)), // fmov s9,s8
-        PatchEntry("HoldControl.LoadZero", 0x1D83C50L, arm64(0x1E2703E0)),
-        PatchEntry("HoldControl.HeadRedirectWait", 0x1D83C58L, arm64(0x54001325)), // b.pl wait
-        PatchEntry("HoldControl.PreventBroken", 0x1D83EDCL, arm64(0x3901827F)), // strb wzr,[x19,#0x8d]
-        PatchEntry("HoldControl.BodySkipToTail", 0x1D83EE0L, arm64(0x1400002E)) // b tail
+        PatchEntry("HoldControl.HeadPassThrough", 0x1D8633CL, arm64(0xD503201F)),
+        PatchEntry("HoldControl.NoFabs", 0x1D86344L, arm64(0x1E204109)), // fmov s9,s8
+        PatchEntry("HoldControl.LoadZero", 0x1D8635CL, arm64(0x1E2703E0)),
+        PatchEntry("HoldControl.HeadRedirectWait", 0x1D86364L, arm64(0x54001325)), // b.pl wait
+        PatchEntry("HoldControl.PreventBroken", 0x1D865E8L, arm64(0x3902367F)), // strb wzr,[x19,#0x8d]
+        PatchEntry("HoldControl.BodySkipToTail", 0x1D865ECL, arm64(0x1400002E)) // b tail
     )
 
     /**
      * 零元购（Free Purchase）注入表
      *
      * 针对 MB 货币购买解锁的曲目实施价格归零与扣款豁免：
-     * 1. SongSelectorItem..ctor (RVA: 0x1DAE724):
+     * 1. SongSelectorItem..ctor (RVA: 0x1DB0F10):
      *    将价格构造参数强制归零 (MOV W0, WZR)，使选曲界面中 MB 曲目的展示价格变更为 0 MB；
-     * 2. MoneyControl.SpendMoney (RVA: 0x1CAA034):
+     * 2. MoneyControl.SpendMoney (RVA: 0x1CAC2F4):
      *    直接返回扣款成功状态码 (MOV W0, #1; RET)，豁免 MB 余额校验与扣减，
      *    触发游戏原生曲目解锁与本地持久化存档写入。
      */
     private val freePurchaseEntries = listOf(
         PatchEntry(
             name = "SongSelectorItem.SetZeroPrice",
-            rva = 0x1DAE724L,
+            rva = 0x1DB0F10L,
             patchBytes = byteArrayOf(
                 0xE0.toByte(), 0x03.toByte(), 0x1F.toByte(), 0x2A.toByte()
             )
         ),
         PatchEntry(
             name = "MoneyControl.SpendMoney",
-            rva = 0x1CAA034L,
+            rva = 0x1CAC2F4L,
             patchBytes = byteArrayOf(
                 0x20.toByte(), 0x00.toByte(), 0x80.toByte(), 0x52.toByte(),
                 0xC0.toByte(), 0x03.toByte(), 0x5F.toByte(), 0xD6.toByte()
@@ -104,21 +105,21 @@ object MemoryPatcher {
      * 一键通关与满分结算（Fast Pass）注入表
      *
      * 针对打歌流程与成绩快照执行原生链路重定向：
-     * 1. ProgressControl.BypassAudioWait (RVA: 0x1D86174):
+     * 1. ProgressControl.BypassAudioWait (RVA: 0x1D88880):
      *    移除全曲播放等待分支 (NOP)，直接进入关卡收尾逻辑；
-     * 2. ProgressControl.BypassCanLevelOver (RVA: 0x1D86184):
+     * 2. ProgressControl.BypassCanLevelOver (RVA: 0x1D88890):
      *    移除 canLevelOver 限制条件 (NOP)，停止音频播放并标记 levelOver = true；
-     * 3. ProgressControl.SetOverTimeDirectly (RVA: 0x1D861C8):
-     *    将关卡结束计时器直接赋为 3.5f (FMOV S0, #3.5)，当帧满足条件并触发原生 LevelOver 结算协程；
-     * 4. ScoreControl.InstantPhiResult (RVA: 0x1D8646C):
+     * 3. ProgressControl.SetOverTimeDirectly (RVA: 0x1D888D4):
+     *    将结束计时器直接赋为 3.5f (FMOV S0, #3.5)，满足普通模式结算与课题模式切曲条件；
+     * 4. ScoreControl.InstantPhiResult (RVA: 0x1D88B78):
      *    从关联的 LevelInformation 中动态提取该谱面实际总音符数，直接向 LevelResultInfo
      *    注入 1000000 分、达成率 100%、全连击（All Perfect / Full Combo）且各项判定精准匹配的数据。
      */
     private val fastPassEntries = listOf(
-        PatchEntry("ProgressControl.BypassAudioWait", 0x1D86174L, arm64(0xD503201F)),
-        PatchEntry("ProgressControl.BypassCanLevelOver", 0x1D86184L, arm64(0xD503201F)),
-        PatchEntry("ProgressControl.SetOverTimeDirectly", 0x1D861C8L, arm64(0x1E219000)),
-        PatchEntry("ScoreControl.InstantPhiResult", 0x1D8646CL, arm64(
+        PatchEntry("ProgressControl.BypassAudioWait", 0x1D88880L, arm64(0xD503201F)),
+        PatchEntry("ProgressControl.BypassCanLevelOver", 0x1D88890L, arm64(0xD503201F)),
+        PatchEntry("ProgressControl.SetOverTimeDirectly", 0x1D888D4L, arm64(0x1E219000)),
+        PatchEntry("ScoreControl.InstantPhiResult", 0x1D88B78L, arm64(
             0xF9401A68, // ldr x8, [x19, #0x30] (levelInformation)
             0xB9402D08, // ldr w8, [x8, #0x2c]  (numOfNotes)
             0x52848009, // movz w9, #0x2400

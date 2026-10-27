@@ -58,7 +58,7 @@ class FloatPanelView(
 
         val titleTextView = TextView(context).apply {
             id = View.generateViewId()
-            text = "phi 4.0.1"
+            text = "phi 4.0.1.2"
             setTextColor(Color.WHITE)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 17f)
             typeface = Typeface.DEFAULT_BOLD

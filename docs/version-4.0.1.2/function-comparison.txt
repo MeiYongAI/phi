@@ -1,0 +1,465 @@
+MoneyControl$$SpendMoney: 20 instructions; identical mnemonics and internal branch offsets; 1 changed encodings
+01caa080 bl #0x1b62518 -> 01cac340 bl #0x1b647e8
+ClickControl$$Judge: 291 instructions; identical mnemonics and internal branch offsets; 57 changed encodings
+01d8215c adrp x20, #0x446e000 -> 01d84868 adrp x20, #0x4475000
+01d82160 ldrb w8, [x20, #0xa1d] -> 01d8486c ldrb w8, [x20, #0xfb2]
+01d8216c adrp x0, #0x4186000 -> 01d84878 adrp x0, #0x418d000
+01d82170 ldr x0, [x0, #0x4d0] -> 01d8487c ldr x0, [x0, #0x908]
+01d82174 bl #0x1b622c0 -> 01d84880 bl #0x1b64590
+01d82178 adrp x0, #0x4186000 -> 01d84884 adrp x0, #0x418d000
+01d8217c ldr x0, [x0, #0x4e0] -> 01d84888 ldr x0, [x0, #0x918]
+01d82180 bl #0x1b622c0 -> 01d8488c bl #0x1b64590
+01d82184 adrp x0, #0x417f000 -> 01d84890 adrp x0, #0x4186000
+01d82188 ldr x0, [x0, #0xa10] -> 01d84894 ldr x0, [x0, #0xe50]
+01d8218c bl #0x1b622c0 -> 01d84898 bl #0x1b64590
+01d82190 adrp x0, #0x417d000 -> 01d8489c adrp x0, #0x4185000
+01d82194 ldr x0, [x0, #0xdb8] -> 01d848a0 ldr x0, [x0, #0x1f8]
+01d82198 bl #0x1b622c0 -> 01d848a4 bl #0x1b64590
+01d8219c adrp x0, #0x417f000 -> 01d848a8 adrp x0, #0x4186000
+01d821a0 ldr x0, [x0, #0xa50] -> 01d848ac ldr x0, [x0, #0xe90]
+01d821a4 bl #0x1b622c0 -> 01d848b0 bl #0x1b64590
+01d821ac strb w8, [x20, #0xa1d] -> 01d848b8 strb w8, [x20, #0xfb2]
+01d821d0 adrp x20, #0x4186000 -> 01d848dc adrp x20, #0x418d000
+01d821d4 ldr x20, [x20, #0x4d0] -> 01d848e0 ldr x20, [x20, #0x908]
+01d821fc bl #0x1b623f4 -> 01d84908 bl #0x1b646c4
+01d82214 adrp x8, #0x417f000 -> 01d84920 adrp x8, #0x4186000
+01d82218 ldr x8, [x8, #0xa50] -> 01d84924 ldr x8, [x8, #0xe90]
+01d82248 bl #0x3c567dc -> 01d84954 bl #0x3c5d77c
+01d82268 bl #0x3c63568 -> 01d84974 bl #0x3c6a618
+01d82284 bl #0x3c567dc -> 01d84990 bl #0x3c5d77c
+01d82290 bl #0x3c64304 -> 01d8499c bl #0x3c6b3b4
+01d822d8 bl #0x1b623f4 -> 01d849e4 bl #0x1b646c4
+01d82354 bl #0x1b623f4 -> 01d84a60 bl #0x1b646c4
+01d8236c adrp x8, #0x417f000 -> 01d84a78 adrp x8, #0x4186000
+01d82370 ldr x8, [x8, #0xa50] -> 01d84a7c ldr x8, [x8, #0xe90]
+01d823a0 bl #0x3c567dc -> 01d84aac bl #0x3c5d77c
+01d823c0 bl #0x3c63568 -> 01d84acc bl #0x3c6a618
+01d823dc bl #0x3c567dc -> 01d84ae8 bl #0x3c5d77c
+01d823e8 bl #0x3c64304 -> 01d84af4 bl #0x3c6b3b4
+01d8244c adrp x8, #0x417d000 -> 01d84b58 adrp x8, #0x4185000
+01d82450 ldr x8, [x8, #0xdb8] -> 01d84b5c ldr x8, [x8, #0x1f8]
+01d82464 bl #0x1b623f4 -> 01d84b70 bl #0x1b646c4
+01d82468 adrp x8, #0x417f000 -> 01d84b74 adrp x8, #0x4186000
+01d8246c ldr x8, [x8, #0xa10] -> 01d84b78 ldr x8, [x8, #0xe50]
+01d82478 bl #0x1fd1994 -> 01d84b84 bl #0x1fd4d40
+01d82484 bl #0x3c596ac -> 01d84b90 bl #0x3c6064c
+01d82494 bl #0x3c567dc -> 01d84ba0 bl #0x3c5d77c
+01d824a0 bl #0x3c64210 -> 01d84bac bl #0x3c6b2c0
+01d824b4 bl #0x3c64ef8 -> 01d84bc0 bl #0x3c6bfa8
+01d824c0 bl #0x3c567dc -> 01d84bcc bl #0x3c5d77c
+01d824cc bl #0x3c64d84 -> 01d84bd8 bl #0x3c6be34
+01d824d8 bl #0x3c64e24 -> 01d84be4 bl #0x3c6bed4
+01d824e4 bl #0x3c567dc -> 01d84bf0 bl #0x3c5d77c
+01d824f0 bl #0x3c64304 -> 01d84bfc bl #0x3c6b3b4
+01d82508 bl #0x3c567dc -> 01d84c14 bl #0x3c5d77c
+01d82528 bl #0x3c646f4 -> 01d84c34 bl #0x3c6b7a4
+01d82560 bl #0x3c651d8 -> 01d84c6c bl #0x3c6c288
+01d825b0 adrp x8, #0x4186000 -> 01d84cbc adrp x8, #0x418d000
+01d825b4 ldr x8, [x8, #0x4e0] -> 01d84cc0 ldr x8, [x8, #0x918]
+01d825bc bl #0x2e4f3bc -> 01d84cc8 bl #0x2e5f9b4
+01d825d4 bl #0x1b62518 -> 01d84ce0 bl #0x1b647e8
+DragControl$$Judge: 164 instructions; identical mnemonics and internal branch offsets; 28 changed encodings
+01d82904 adrp x20, #0x446e000 -> 01d85010 adrp x20, #0x4475000
+01d82908 ldrb w8, [x20, #0xa1f] -> 01d85014 ldrb w8, [x20, #0xfb4]
+01d82914 adrp x0, #0x4186000 -> 01d85020 adrp x0, #0x418d000
+01d82918 ldr x0, [x0, #0x4e0] -> 01d85024 ldr x0, [x0, #0x918]
+01d8291c bl #0x1b622c0 -> 01d85028 bl #0x1b64590
+01d82920 adrp x0, #0x417f000 -> 01d8502c adrp x0, #0x4186000
+01d82924 ldr x0, [x0, #0xa50] -> 01d85030 ldr x0, [x0, #0xe90]
+01d82928 bl #0x1b622c0 -> 01d85034 bl #0x1b64590
+01d82930 strb w8, [x20, #0xa1f] -> 01d8503c strb w8, [x20, #0xfb4]
+01d8294c adrp x9, #0xc34000 -> 01d85058 adrp x9, #0xc35000
+01d82950 ldr s0, [x9, #0x4ec] -> 01d8505c ldr s0, [x9, #0x1bc]
+01d82998 adrp x13, #0xc34000 -> 01d850a4 adrp x13, #0xc35000
+01d829a0 ldr s0, [x13, #0x7b0] -> 01d850ac ldr s0, [x13, #0x484]
+01d829e8 adrp x8, #0xc34000 -> 01d850f4 adrp x8, #0xc35000
+01d829ec ldr s0, [x8, #0x854] -> 01d850f8 ldr s0, [x8, #0x528]
+01d82a04 adrp x8, #0x417f000 -> 01d85110 adrp x8, #0x4186000
+01d82a08 ldr x8, [x8, #0xa50] -> 01d85114 ldr x8, [x8, #0xe90]
+01d82a38 bl #0x3c567dc -> 01d85144 bl #0x3c5d77c
+01d82a58 bl #0x3c63568 -> 01d85164 bl #0x3c6a618
+01d82a74 bl #0x3c567dc -> 01d85180 bl #0x3c5d77c
+01d82a80 bl #0x3c64304 -> 01d8518c bl #0x3c6b3b4
+01d82abc adrp x8, #0xc34000 -> 01d851c8 adrp x8, #0xc35000
+01d82ac0 ldr s0, [x8, #0x7dc] -> 01d851cc ldr s0, [x8, #0x4b0]
+01d82b48 adrp x8, #0x4186000 -> 01d85254 adrp x8, #0x418d000
+01d82b4c ldr x8, [x8, #0x4e0] -> 01d85258 ldr x8, [x8, #0x918]
+01d82b54 bl #0x2e4f3bc -> 01d85260 bl #0x2e5f9b4
+01d82b80 bl #0x1b62518 -> 01d8528c bl #0x1b647e8
+01d82b84 bl #0x1b62520 -> 01d85290 bl #0x1b647f0
+FlickControl$$Judge: 197 instructions; identical mnemonics and internal branch offsets; 34 changed encodings
+01d82f04 adrp x20, #0x446e000 -> 01d85610 adrp x20, #0x4475000
+01d82f08 ldrb w8, [x20, #0xa22] -> 01d85614 ldrb w8, [x20, #0xfb7]
+01d82f14 adrp x0, #0x4186000 -> 01d85620 adrp x0, #0x418d000
+01d82f18 ldr x0, [x0, #0x4d0] -> 01d85624 ldr x0, [x0, #0x908]
+01d82f1c bl #0x1b622c0 -> 01d85628 bl #0x1b64590
+01d82f20 adrp x0, #0x4186000 -> 01d8562c adrp x0, #0x418d000
+01d82f24 ldr x0, [x0, #0x4e0] -> 01d85630 ldr x0, [x0, #0x918]
+01d82f28 bl #0x1b622c0 -> 01d85634 bl #0x1b64590
+01d82f2c adrp x0, #0x417f000 -> 01d85638 adrp x0, #0x4186000
+01d82f30 ldr x0, [x0, #0xa50] -> 01d8563c ldr x0, [x0, #0xe90]
+01d82f34 bl #0x1b622c0 -> 01d85640 bl #0x1b64590
+01d82f3c strb w8, [x20, #0xa22] -> 01d85648 strb w8, [x20, #0xfb7]
+01d82f58 adrp x10, #0xc34000 -> 01d85664 adrp x10, #0xc35000
+01d82f64 ldr s2, [x10, #0x854] -> 01d85670 ldr s2, [x10, #0x528]
+01d82f84 adrp x8, #0x417f000 -> 01d85690 adrp x8, #0x4186000
+01d82f88 ldr x8, [x8, #0xa50] -> 01d85694 ldr x8, [x8, #0xe90]
+01d82fb8 bl #0x3c567dc -> 01d856c4 bl #0x3c5d77c
+01d82fd8 bl #0x3c63568 -> 01d856e4 bl #0x3c6a618
+01d82ff4 bl #0x3c567dc -> 01d85700 bl #0x3c5d77c
+01d83000 bl #0x3c64304 -> 01d8570c bl #0x3c6b3b4
+01d83074 adrp x20, #0x4186000 -> 01d85780 adrp x20, #0x418d000
+01d83078 ldr x20, [x20, #0x4d0] -> 01d85784 ldr x20, [x20, #0x908]
+01d83088 bl #0x1b623f4 -> 01d85794 bl #0x1b646c4
+01d830fc adrp x20, #0x4186000 -> 01d85808 adrp x20, #0x418d000
+01d83104 ldr x20, [x20, #0x4e0] -> 01d85810 ldr x20, [x20, #0x918]
+01d8310c bl #0x2e4f3bc -> 01d85818 bl #0x2e5f9b4
+01d83154 adrp x8, #0x4186000 -> 01d85860 adrp x8, #0x418d000
+01d83158 ldr x8, [x8, #0x4e0] -> 01d85864 ldr x8, [x8, #0x918]
+01d83160 bl #0x2e4f3bc -> 01d8586c bl #0x2e5f9b4
+01d831a4 adrp x20, #0x4186000 -> 01d858b0 adrp x20, #0x418d000
+01d831ac ldr x20, [x20, #0x4e0] -> 01d858b8 ldr x20, [x20, #0x918]
+01d831b4 bl #0x2e4f3bc -> 01d858c0 bl #0x2e5f9b4
+01d831e4 bl #0x2e4f3bc -> 01d858f0 bl #0x2e5f9b4
+01d83208 bl #0x1b62518 -> 01d85914 bl #0x1b647e8
+HoldControl$$Judge: 344 instructions; identical mnemonics and internal branch offsets; 57 changed encodings
+01d83b94 adrp x20, #0x446e000 -> 01d862a0 adrp x20, #0x4475000
+01d83b98 ldrb w8, [x20, #0xa24] -> 01d862a4 ldrb w8, [x20, #0xfb9]
+01d83ba4 adrp x0, #0x4186000 -> 01d862b0 adrp x0, #0x418d000
+01d83ba8 ldr x0, [x0, #0x4d0] -> 01d862b4 ldr x0, [x0, #0x908]
+01d83bac bl #0x1b622c0 -> 01d862b8 bl #0x1b64590
+01d83bb0 adrp x0, #0x4186000 -> 01d862bc adrp x0, #0x418d000
+01d83bb4 ldr x0, [x0, #0x4e0] -> 01d862c0 ldr x0, [x0, #0x918]
+01d83bb8 bl #0x1b622c0 -> 01d862c4 bl #0x1b64590
+01d83bbc adrp x0, #0x417f000 -> 01d862c8 adrp x0, #0x4186000
+01d83bc0 ldr x0, [x0, #0xa10] -> 01d862cc ldr x0, [x0, #0xe50]
+01d83bc4 bl #0x1b622c0 -> 01d862d0 bl #0x1b64590
+01d83bc8 adrp x0, #0x417d000 -> 01d862d4 adrp x0, #0x4185000
+01d83bcc ldr x0, [x0, #0xdb8] -> 01d862d8 ldr x0, [x0, #0x1f8]
+01d83bd0 bl #0x1b622c0 -> 01d862dc bl #0x1b64590
+01d83bd4 adrp x0, #0x417f000 -> 01d862e0 adrp x0, #0x4186000
+01d83bd8 ldr x0, [x0, #0xa50] -> 01d862e4 ldr x0, [x0, #0xe90]
+01d83bdc bl #0x1b622c0 -> 01d862e8 bl #0x1b64590
+01d83be4 strb w8, [x20, #0xa24] -> 01d862f0 strb w8, [x20, #0xfb9]
+01d83c18 adrp x20, #0x4186000 -> 01d86324 adrp x20, #0x418d000
+01d83c28 ldr x20, [x20, #0x4d0] -> 01d86334 ldr x20, [x20, #0x908]
+01d83c44 bl #0x1b623f4 -> 01d86350 bl #0x1b646c4
+01d83c64 adrp x8, #0x417f000 -> 01d86370 adrp x8, #0x4186000
+01d83c68 ldr x8, [x8, #0xa50] -> 01d86374 ldr x8, [x8, #0xe90]
+01d83c94 adrp x8, #0x417d000 -> 01d863a0 adrp x8, #0x4185000
+01d83c98 ldr x8, [x8, #0xdb8] -> 01d863a4 ldr x8, [x8, #0x1f8]
+01d83cb0 bl #0x1b623f4 -> 01d863bc bl #0x1b646c4
+01d83d10 bl #0x1b623f4 -> 01d8641c bl #0x1b646c4
+01d83d30 adrp x8, #0x417f000 -> 01d8643c adrp x8, #0x4186000
+01d83d34 ldr x8, [x8, #0xa50] -> 01d86440 ldr x8, [x8, #0xe90]
+01d83d60 adrp x8, #0x417d000 -> 01d8646c adrp x8, #0x4185000
+01d83d64 ldr x8, [x8, #0xdb8] -> 01d86470 ldr x8, [x8, #0x1f8]
+01d83d78 bl #0x1b623f4 -> 01d86484 bl #0x1b646c4
+01d83d7c adrp x8, #0x417f000 -> 01d86488 adrp x8, #0x4186000
+01d83d80 ldr x8, [x8, #0xa10] -> 01d8648c ldr x8, [x8, #0xe50]
+01d83d8c bl #0x1fd1994 -> 01d86498 bl #0x1fd4d40
+01d83d98 bl #0x3c596ac -> 01d864a4 bl #0x3c6064c
+01d83da0 adrp x8, #0xc34000 -> 01d864ac adrp x8, #0xc35000
+01d83da8 ldr s1, [x8, #0x39c] -> 01d864b4 ldr s1, [x8, #0x6c]
+01d83dc0 bl #0x3c64e24 -> 01d864cc bl #0x3c6bed4
+01d83dcc bl #0x3c567dc -> 01d864d8 bl #0x3c5d77c
+01d83dd8 bl #0x3c64304 -> 01d864e4 bl #0x3c6b3b4
+01d83de4 bl #0x1cb6290 -> 01d864f0 bl #0x1cb8068
+01d83df0 bl #0x3c643a4 -> 01d864fc bl #0x3c6b454
+01d83e4c adrp x8, #0x4186000 -> 01d86558 adrp x8, #0x418d000
+01d83e50 ldr x8, [x8, #0x4e0] -> 01d8655c ldr x8, [x8, #0x918]
+01d83e58 bl #0x2e4f3bc -> 01d86564 bl #0x2e5f9b4
+01d83ea4 adrp x8, #0x4186000 -> 01d865b0 adrp x8, #0x418d000
+01d83ea8 ldr x8, [x8, #0x4e0] -> 01d865b4 ldr x8, [x8, #0x918]
+01d83eb0 bl #0x2e4f3bc -> 01d865bc bl #0x2e5f9b4
+01d83efc adrp x12, #0xc34000 -> 01d86608 adrp x12, #0xc35000
+01d83f04 ldr s0, [x12, #0x548] -> 01d86610 ldr s0, [x12, #0x21c]
+01d83fb0 adrp x10, #0xc34000 -> 01d866bc adrp x10, #0xc35000
+01d83fb4 ldr s2, [x10, #0x4b0] -> 01d866c0 ldr s2, [x10, #0x180]
+01d83ff4 bl #0x3c567dc -> 01d86700 bl #0x3c5d77c
+01d84000 bl #0x3c64304 -> 01d8670c bl #0x3c6b3b4
+01d840e0 bl #0x1b62518 -> 01d867ec bl #0x1b647e8
+01d840e4 bl #0x1b62520 -> 01d867f0 bl #0x1b647f0
+ProgressControl$$Update: 523 instructions; identical mnemonics and internal branch offsets; 123 changed encodings
+01d85ba4 adrp x20, #0x446e000 -> 01d882b0 adrp x20, #0x4475000
+01d85ba8 ldrb w8, [x20, #0xa30] -> 01d882b4 ldrb w8, [x20, #0xfc5]
+01d85bb4 adrp x0, #0x4185000 -> 01d882c0 adrp x0, #0x418c000
+01d85bb8 ldr x0, [x0, #0x20] -> 01d882c4 ldr x0, [x0, #0x470]
+01d85bbc bl #0x1b622c0 -> 01d882c8 bl #0x1b64590
+01d85bc0 adrp x0, #0x4181000 -> 01d882cc adrp x0, #0x4188000
+01d85bc4 ldr x0, [x0, #0xae0] -> 01d882d0 ldr x0, [x0, #0xec8]
+01d85bc8 bl #0x1b622c0 -> 01d882d4 bl #0x1b64590
+01d85bcc adrp x0, #0x4186000 -> 01d882d8 adrp x0, #0x418d000
+01d85bd0 ldr x0, [x0, #0x4d0] -> 01d882dc ldr x0, [x0, #0x908]
+01d85bd4 bl #0x1b622c0 -> 01d882e0 bl #0x1b64590
+01d85bd8 adrp x0, #0x417e000 -> 01d882e4 adrp x0, #0x4185000
+01d85bdc ldr x0, [x0, #0x3f0] -> 01d882e8 ldr x0, [x0, #0x830]
+01d85be0 bl #0x1b622c0 -> 01d882ec bl #0x1b64590
+01d85be4 adrp x0, #0x417f000 -> 01d882f0 adrp x0, #0x4186000
+01d85be8 ldr x0, [x0, #0xa10] -> 01d882f4 ldr x0, [x0, #0xe50]
+01d85bec bl #0x1b622c0 -> 01d882f8 bl #0x1b64590
+01d85bf0 adrp x0, #0x417d000 -> 01d882fc adrp x0, #0x4185000
+01d85bf4 ldr x0, [x0, #0xdb8] -> 01d88300 ldr x0, [x0, #0x1f8]
+01d85bf8 bl #0x1b622c0 -> 01d88304 bl #0x1b64590
+01d85bfc adrp x0, #0x4186000 -> 01d88308 adrp x0, #0x418e000
+01d85c00 ldr x0, [x0, #0xc60] -> 01d8830c ldr x0, [x0, #0xa0]
+01d85c04 bl #0x1b622c0 -> 01d88310 bl #0x1b64590
+01d85c08 adrp x0, #0x4186000 -> 01d88314 adrp x0, #0x418e000
+01d85c0c ldr x0, [x0, #0xc68] -> 01d88318 ldr x0, [x0, #0xa8]
+01d85c10 bl #0x1b622c0 -> 01d8831c bl #0x1b64590
+01d85c18 strb w8, [x20, #0xa30] -> 01d88324 strb w8, [x20, #0xfc5]
+01d85c68 bl #0x3c618cc -> 01d88374 bl #0x3c6897c
+01d85d30 adrp x20, #0x4186000 -> 01d8843c adrp x20, #0x418d000
+01d85d34 ldr x20, [x20, #0x4d0] -> 01d88440 ldr x20, [x20, #0x908]
+01d85d44 bl #0x1b623f4 -> 01d88450 bl #0x1b646c4
+01d85d50 adrp x10, #0xbf7000 -> 01d8845c adrp x10, #0xbf8000
+01d85d54 ldr d2, [x10, #0x7f8] -> 01d88460 ldr d2, [x10, #0x478]
+01d85d58 adrp x10, #0xc34000 -> 01d88464 adrp x10, #0xc35000
+01d85d60 ldr s3, [x10, #0x7b4] -> 01d8846c ldr s3, [x10, #0x488]
+01d85d80 adrp x20, #0x4186000 -> 01d8848c adrp x20, #0x418d000
+01d85d84 ldr x20, [x20, #0x4d0] -> 01d88490 ldr x20, [x20, #0x908]
+01d85d94 bl #0x1b623f4 -> 01d884a0 bl #0x1b646c4
+01d85d9c adrp x9, #0xbf7000 -> 01d884a8 adrp x9, #0xbf8000
+01d85da0 ldr d1, [x9, #0x5c0] -> 01d884ac ldr d1, [x9, #0x248]
+01d85da4 adrp x9, #0xc34000 -> 01d884b0 adrp x9, #0xc35000
+01d85dac ldr s0, [x9, #0x834] -> 01d884b8 ldr s0, [x9, #0x508]
+01d85dcc adrp x22, #0x417e000 -> 01d884d8 adrp x22, #0x4185000
+01d85dd0 ldr x22, [x22, #0x3f0] -> 01d884dc ldr x22, [x22, #0x830]
+01d85de4 bl #0x1b623f4 -> 01d884f0 bl #0x1b646c4
+01d85dec adrp x9, #0xbf7000 -> 01d884f8 adrp x9, #0xbf8000
+01d85df4 ldr d8, [x9, #0x9d8] -> 01d88500 ldr d8, [x9, #0x660]
+01d85e3c bl #0x1db52cc -> 01d88548 bl #0x1db7ab8
+01d85e48 bl #0x3c6187c -> 01d88554 bl #0x3c6892c
+01d85e64 bl #0x1db52f4 -> 01d88570 bl #0x1db7ae0
+01d85e88 adrp x8, #0x417d000 -> 01d88594 adrp x8, #0x4185000
+01d85e8c ldr x8, [x8, #0xdb8] -> 01d88598 ldr x8, [x8, #0x1f8]
+01d85ea0 bl #0x1b623f4 -> 01d885ac bl #0x1b646c4
+01d85eac bl #0x3c5d6b0 -> 01d885b8 bl #0x3c64650
+01d85ec0 bl #0x3c6187c -> 01d885cc bl #0x3c6892c
+01d85ed4 bl #0x3c6187c -> 01d885e0 bl #0x3c6892c
+01d85f10 adrp x8, #0xc34000 -> 01d8861c adrp x8, #0xc35000
+01d85f14 ldr s2, [x8, #0x5a4] -> 01d88620 ldr s2, [x8, #0x278]
+01d85f4c bl #0x3c6187c -> 01d88658 bl #0x3c6892c
+01d85f94 bl #0x1db5d38 -> 01d886a0 bl #0x1db8524
+01d85f9c bl #0x3c6187c -> 01d886a8 bl #0x3c6892c
+01d85fdc bl #0x1db5538 -> 01d886e8 bl #0x1db7d24
+01d85ff0 bl #0x3c55d5c -> 01d886fc bl #0x3c5ccfc
+01d85ff4 adrp x8, #0x417d000 -> 01d88700 adrp x8, #0x4185000
+01d85ff8 ldr x8, [x8, #0xdb8] -> 01d88704 ldr x8, [x8, #0x1f8]
+01d8600c bl #0x1b623f4 -> 01d88718 bl #0x1b646c4
+01d86018 bl #0x3c5d6b0 -> 01d88724 bl #0x3c64650
+01d86030 bl #0x3c09818 -> 01d8873c bl #0x3c107b8
+01d86048 bl #0x3c24fa4 -> 01d88754 bl #0x3c2bf44
+01d86054 bl #0x3c24fcc -> 01d88760 bl #0x3c2bf6c
+01d86074 bl #0x3c596ac -> 01d88780 bl #0x3c6064c
+01d86078 adrp x8, #0xc34000 -> 01d88784 adrp x8, #0xc35000
+01d8607c ldr s0, [x8, #0x648] -> 01d88788 ldr s0, [x8, #0x31c]
+01d86090 bl #0x3c24fa4 -> 01d8879c bl #0x3c2bf44
+01d8609c bl #0x3c24fcc -> 01d887a8 bl #0x3c2bf6c
+01d860dc adrp x8, #0xc34000 -> 01d887e8 adrp x8, #0xc35000
+01d860e0 ldr s1, [x8, #0x680] -> 01d887ec ldr s1, [x8, #0x354]
+01d8610c bl #0x3c63568 -> 01d88818 bl #0x3c6a618
+01d86120 bl #0x1b623f4 -> 01d8882c bl #0x1b646c4
+01d86148 bl #0x1b623f4 -> 01d88854 bl #0x1b646c4
+01d86158 bl #0x34754e8 -> 01d88864 bl #0x347c488
+01d8615c adrp x8, #0xc34000 -> 01d88868 adrp x8, #0xc35000
+01d86164 ldr s2, [x8, #0x7c4] -> 01d88870 ldr s2, [x8, #0x498]
+01d86194 bl #0x1db5e74 -> 01d888a0 bl #0x1db8660
+01d861c0 bl #0x3c618cc -> 01d888cc bl #0x3c6897c
+01d861d4 adrp x8, #0xc34000 -> 01d888e0 adrp x8, #0xc35000
+01d861d8 ldr s1, [x8, #0x550] -> 01d888e4 ldr s1, [x8, #0x224]
+01d861e4 adrp x20, #0x446e000 -> 01d888f0 adrp x20, #0x4475000
+01d861e8 ldrb w8, [x20, #0x332] -> 01d888f4 ldrb w8, [x20, #0x8c0]
+01d861f0 adrp x0, #0x417f000 -> 01d888fc adrp x0, #0x4186000
+01d861f4 ldr x0, [x0, #0xaa8] -> 01d88900 ldr x0, [x0, #0xee8]
+01d861f8 bl #0x1b622c0 -> 01d88904 bl #0x1b64590
+01d86200 strb w8, [x20, #0x332] -> 01d8890c strb w8, [x20, #0x8c0]
+01d8620c adrp x8, #0x417f000 -> 01d88918 adrp x8, #0x4186000
+01d86210 ldr x8, [x8, #0xaa8] -> 01d8891c ldr x8, [x8, #0xee8]
+01d8622c adrp x8, #0x4185000 -> 01d88938 adrp x8, #0x418c000
+01d86230 ldr x8, [x8, #0x20] -> 01d8893c ldr x8, [x8, #0x470]
+01d8623c bl #0x1f46c70 -> 01d88948 bl #0x1f4a01c
+01d86260 bl #0x3c5b104 -> 01d8896c bl #0x3c620a4
+01d86264 adrp x8, #0x417d000 -> 01d88970 adrp x8, #0x4185000
+01d86268 ldr x8, [x8, #0xdb8] -> 01d88974 ldr x8, [x8, #0x1f8]
+01d8627c bl #0x1b623f4 -> 01d88988 bl #0x1b646c4
+01d86280 adrp x8, #0x417f000 -> 01d8898c adrp x8, #0x4186000
+01d86284 ldr x8, [x8, #0xa10] -> 01d88990 ldr x8, [x8, #0xe50]
+01d86290 bl #0x1fd1994 -> 01d8899c bl #0x1fd4d40
+01d862b0 adrp x8, #0x4181000 -> 01d889bc adrp x8, #0x4188000
+01d862b4 ldr x8, [x8, #0xae0] -> 01d889c0 ldr x8, [x8, #0xec8]
+01d862bc bl #0x1f8e794 -> 01d889c8 bl #0x1f91b40
+01d862c4 adrp x8, #0x4186000 -> 01d889d0 adrp x8, #0x418e000
+01d862c8 ldr x8, [x8, #0xc60] -> 01d889d4 ldr x8, [x8, #0xa0]
+01d862d4 bl #0x3c06c34 -> 01d889e0 bl #0x3c0dbd4
+01d862f8 adrp x8, #0xc34000 -> 01d88a04 adrp x8, #0xc35000
+01d862fc ldr s1, [x8, #0x508] -> 01d88a08 ldr s1, [x8, #0x1dc]
+01d86310 bl #0x3c596ac -> 01d88a1c bl #0x3c6064c
+01d8631c adrp x8, #0xc34000 -> 01d88a28 adrp x8, #0xc35000
+01d86320 ldr s1, [x8, #0x69c] -> 01d88a2c ldr s1, [x8, #0x370]
+01d86344 bl #0x3c596ac -> 01d88a50 bl #0x3c6064c
+01d8635c bl #0x3c64e24 -> 01d88a68 bl #0x3c6bed4
+01d86390 adrp x8, #0x4186000 -> 01d88a9c adrp x8, #0x418e000
+01d86394 ldr x8, [x8, #0xc68] -> 01d88aa0 ldr x8, [x8, #0xa8]
+01d863b4 b #0x3c5af60 -> 01d88ac0 b #0x3c61f00
+01d863b8 bl #0x1b62520 -> 01d88ac4 bl #0x1b647f0
+01d863bc bl #0x1b62518 -> 01d88ac8 bl #0x1b647e8
+ScoreControl$$GetLevelResultInfo: 72 instructions; identical mnemonics and internal branch offsets; 28 changed encodings
+01d863c8 adrp x20, #0x446e000 -> 01d88ad4 adrp x20, #0x4475000
+01d863cc ldrb w8, [x20, #0xa3e] -> 01d88ad8 ldrb w8, [x20, #0xfd3]
+01d863d8 adrp x0, #0x4182000 -> 01d88ae4 adrp x0, #0x418a000
+01d863dc ldr x0, [x0, #0xf00] -> 01d88ae8 ldr x0, [x0, #0x340]
+01d863e0 bl #0x1b622c0 -> 01d88aec bl #0x1b64590
+01d863e4 adrp x0, #0x4186000 -> 01d88af0 adrp x0, #0x418e000
+01d863e8 ldr x0, [x0, #0xc70] -> 01d88af4 ldr x0, [x0, #0xb0]
+01d863ec bl #0x1b622c0 -> 01d88af8 bl #0x1b64590
+01d863f4 strb w8, [x20, #0xa3e] -> 01d88b00 strb w8, [x20, #0xfd3]
+01d863f8 adrp x20, #0x446e000 -> 01d88b04 adrp x20, #0x4475000
+01d863fc ldrb w8, [x20, #0x332] -> 01d88b08 ldrb w8, [x20, #0x8c0]
+01d86404 adrp x0, #0x417f000 -> 01d88b10 adrp x0, #0x4186000
+01d86408 ldr x0, [x0, #0xaa8] -> 01d88b14 ldr x0, [x0, #0xee8]
+01d8640c bl #0x1b622c0 -> 01d88b18 bl #0x1b64590
+01d86414 strb w8, [x20, #0x332] -> 01d88b20 strb w8, [x20, #0x8c0]
+01d86418 adrp x8, #0x417f000 -> 01d88b24 adrp x8, #0x4186000
+01d8641c ldr x8, [x8, #0xaa8] -> 01d88b28 ldr x8, [x8, #0xee8]
+01d8643c adrp x20, #0x4182000 -> 01d88b48 adrp x20, #0x418a000
+01d86440 ldr x20, [x20, #0xf00] -> 01d88b4c ldr x20, [x20, #0x340]
+01d86448 bl #0x1cda2e8 -> 01d88b54 bl #0x1cdcb8c
+01d86458 bl #0x1b62508 -> 01d88b64 bl #0x1b647d8
+01d86464 bl #0x1cbf19c -> 01d88b70 bl #0x1cc0fe8
+01d86478 bl #0x1cbf0cc -> 01d88b84 bl #0x1cc0f18
+01d86488 bl #0x1cbf134 -> 01d88b94 bl #0x1cc0f80
+01d864b4 adrp x8, #0x4186000 -> 01d88bc0 adrp x8, #0x418e000
+01d864b8 ldr x8, [x8, #0xc70] -> 01d88bc4 ldr x8, [x8, #0xb0]
+01d864c4 bl #0x2e4f3bc -> 01d88bd0 bl #0x2e5f9b4
+01d864dc bl #0x1b62518 -> 01d88be8 bl #0x1b647e8
+SongSelectorItem$$.ctor: 397 instructions; identical mnemonics and internal branch offsets; 129 changed encodings
+01dae35c adrp x29, #0x446e000 -> 01db0b48 adrp x29, #0x4476000
+01dae360 adrp x28, #0x4187000 -> 01db0b4c adrp x28, #0x418f000
+01dae364 adrp x24, #0x4187000 -> 01db0b50 adrp x24, #0x418f000
+01dae368 adrp x27, #0x4180000 -> 01db0b54 adrp x27, #0x4187000
+01dae36c adrp x25, #0x4180000 -> 01db0b58 adrp x25, #0x4187000
+01dae370 adrp x26, #0x4180000 -> 01db0b5c adrp x26, #0x4187000
+01dae374 ldrb w8, [x29, #0xb57] -> 01db0b60 ldrb w8, [x29, #0xec]
+01dae378 ldr x28, [x28, #0xf28] -> 01db0b64 ldr x28, [x28, #0x368]
+01dae37c ldr x24, [x24, #0xf30] -> 01db0b68 ldr x24, [x24, #0x370]
+01dae380 ldr x27, [x27, #0x5c0] -> 01db0b6c ldr x27, [x27, #0x9a0]
+01dae384 ldr x25, [x25, #0x5b0] -> 01db0b70 ldr x25, [x25, #0x990]
+01dae388 ldr x26, [x26, #0x590] -> 01db0b74 ldr x26, [x26, #0x970]
+01dae3a4 adrp x0, #0x4187000 -> 01db0b90 adrp x0, #0x418f000
+01dae3a8 ldr x0, [x0, #0xf30] -> 01db0b94 ldr x0, [x0, #0x370]
+01dae3ac bl #0x1b622c0 -> 01db0b98 bl #0x1b64590
+01dae3b0 adrp x0, #0x4187000 -> 01db0b9c adrp x0, #0x418f000
+01dae3b4 ldr x0, [x0, #0xf28] -> 01db0ba0 ldr x0, [x0, #0x368]
+01dae3b8 bl #0x1b622c0 -> 01db0ba4 bl #0x1b64590
+01dae3bc adrp x0, #0x417f000 -> 01db0ba8 adrp x0, #0x4186000
+01dae3c0 ldr x0, [x0, #0xaa8] -> 01db0bac ldr x0, [x0, #0xee8]
+01dae3c4 bl #0x1b622c0 -> 01db0bb0 bl #0x1b64590
+01dae3c8 adrp x0, #0x4180000 -> 01db0bb4 adrp x0, #0x4187000
+01dae3cc ldr x0, [x0, #0x590] -> 01db0bb8 ldr x0, [x0, #0x970]
+01dae3d0 bl #0x1b622c0 -> 01db0bbc bl #0x1b64590
+01dae3d4 adrp x0, #0x4180000 -> 01db0bc0 adrp x0, #0x4187000
+01dae3d8 ldr x0, [x0, #0x778] -> 01db0bc4 ldr x0, [x0, #0xb58]
+01dae3dc bl #0x1b622c0 -> 01db0bc8 bl #0x1b64590
+01dae3e0 adrp x0, #0x4180000 -> 01db0bcc adrp x0, #0x4187000
+01dae3e4 ldr x0, [x0, #0x5a0] -> 01db0bd0 ldr x0, [x0, #0x980]
+01dae3e8 bl #0x1b622c0 -> 01db0bd4 bl #0x1b64590
+01dae3ec adrp x0, #0x4180000 -> 01db0bd8 adrp x0, #0x4187000
+01dae3f0 ldr x0, [x0, #0x770] -> 01db0bdc ldr x0, [x0, #0xb50]
+01dae3f4 bl #0x1b622c0 -> 01db0be0 bl #0x1b64590
+01dae3f8 adrp x0, #0x4180000 -> 01db0be4 adrp x0, #0x4187000
+01dae3fc ldr x0, [x0, #0x5b0] -> 01db0be8 ldr x0, [x0, #0x990]
+01dae400 bl #0x1b622c0 -> 01db0bec bl #0x1b64590
+01dae404 adrp x0, #0x4180000 -> 01db0bf0 adrp x0, #0x4187000
+01dae408 ldr x0, [x0, #0x640] -> 01db0bf4 ldr x0, [x0, #0xa20]
+01dae40c bl #0x1b622c0 -> 01db0bf8 bl #0x1b64590
+01dae410 adrp x0, #0x4180000 -> 01db0bfc adrp x0, #0x4187000
+01dae414 ldr x0, [x0, #0x5c0] -> 01db0c00 ldr x0, [x0, #0x9a0]
+01dae418 bl #0x1b622c0 -> 01db0c04 bl #0x1b64590
+01dae41c adrp x0, #0x4180000 -> 01db0c08 adrp x0, #0x4187000
+01dae420 ldr x0, [x0, #0x768] -> 01db0c0c ldr x0, [x0, #0xb48]
+01dae424 bl #0x1b622c0 -> 01db0c10 bl #0x1b64590
+01dae428 adrp x0, #0x417f000 -> 01db0c14 adrp x0, #0x4186000
+01dae42c ldr x0, [x0, #0xa18] -> 01db0c18 ldr x0, [x0, #0xe58]
+01dae430 bl #0x1b622c0 -> 01db0c1c bl #0x1b64590
+01dae434 adrp x0, #0x4180000 -> 01db0c20 adrp x0, #0x4187000
+01dae438 ldr x0, [x0, #0x2b8] -> 01db0c24 ldr x0, [x0, #0x6a0]
+01dae43c bl #0x1b622c0 -> 01db0c28 bl #0x1b64590
+01dae440 adrp x0, #0x4180000 -> 01db0c2c adrp x0, #0x4187000
+01dae444 ldr x0, [x0, #0x818] -> 01db0c30 ldr x0, [x0, #0xc00]
+01dae448 bl #0x1b622c0 -> 01db0c34 bl #0x1b64590
+01dae44c adrp x0, #0x4180000 -> 01db0c38 adrp x0, #0x4187000
+01dae450 ldr x0, [x0, #0x6d0] -> 01db0c3c ldr x0, [x0, #0xab0]
+01dae454 bl #0x1b622c0 -> 01db0c40 bl #0x1b64590
+01dae458 adrp x0, #0x417d000 -> 01db0c44 adrp x0, #0x4185000
+01dae45c ldr x0, [x0, #0xe88] -> 01db0c48 ldr x0, [x0, #0x2c8]
+01dae460 bl #0x1b622c0 -> 01db0c4c bl #0x1b64590
+01dae468 strb w8, [x29, #0xb57] -> 01db0c54 strb w8, [x29, #0xec]
+01dae46c adrp x8, #0xbf7000 -> 01db0c58 adrp x8, #0xbf8000
+01dae470 ldr d0, [x8, #0x908] -> 01db0c5c ldr d0, [x8, #0x588]
+01dae484 bl #0x1b62508 -> 01db0c70 bl #0x1b647d8
+01dae490 bl #0x29cc724 -> 01db0c7c bl #0x29d92e4
+01dae49c bl #0x1b62508 -> 01db0c88 bl #0x1b647d8
+01dae4a8 bl #0x2e4eeb4 -> 01db0c94 bl #0x2e5f4ac
+01dae4b0 bl #0x1b62508 -> 01db0c9c bl #0x1b647d8
+01dae4bc bl #0x1cb6348 -> 01db0ca8 bl #0x1cb8120
+01dae4c4 adrp x27, #0x4180000 -> 01db0cb0 adrp x27, #0x4187000
+01dae4c8 ldr x27, [x27, #0x5a0] -> 01db0cb4 ldr x27, [x27, #0x980]
+01dae51c bl #0x2e4f680 -> 01db0d08 bl #0x2e5fc78
+01dae524 bl #0x1b62508 -> 01db0d10 bl #0x1b647d8
+01dae530 bl #0x1cb6348 -> 01db0d1c bl #0x1cb8120
+01dae584 bl #0x2e4f680 -> 01db0d70 bl #0x2e5fc78
+01dae58c bl #0x1b62508 -> 01db0d78 bl #0x1b647d8
+01dae598 bl #0x1cb6348 -> 01db0d84 bl #0x1cb8120
+01dae5ec bl #0x2e4f680 -> 01db0dd8 bl #0x2e5fc78
+01dae5f4 bl #0x1b62508 -> 01db0de0 bl #0x1b647d8
+01dae600 bl #0x1cb6348 -> 01db0dec bl #0x1cb8120
+01dae654 bl #0x2e4f680 -> 01db0e40 bl #0x2e5fc78
+01dae65c bl #0x1b62508 -> 01db0e48 bl #0x1b647d8
+01dae668 bl #0x1cb6348 -> 01db0e54 bl #0x1cb8120
+01dae6bc bl #0x2e4f680 -> 01db0ea8 bl #0x2e5fc78
+01dae6d0 bl #0x34b9588 -> 01db0ebc bl #0x34c0528
+01dae710 bl #0x34722ac -> 01db0efc bl #0x347924c
+01dae728 bl #0x1caa5c0 -> 01db0f14 bl #0x1cac880
+01dae748 adrp x8, #0xbf7000 -> 01db0f34 adrp x8, #0xbf8000
+01dae74c ldr d0, [x8, #0xa18] -> 01db0f38 ldr d0, [x8, #0x6a0]
+01dae754 adrp x8, #0x417f000 -> 01db0f40 adrp x8, #0x4186000
+01dae75c ldr x8, [x8, #0xa18] -> 01db0f48 ldr x8, [x8, #0xe58]
+01dae764 adrp x9, #0xbf7000 -> 01db0f50 adrp x9, #0xbf8000
+01dae768 ldr d0, [x9, #0xdc8] -> 01db0f54 ldr d0, [x9, #0xa48]
+01dae774 adrp x22, #0x4180000 -> 01db0f60 adrp x22, #0x4187000
+01dae778 adrp x21, #0x417d000 -> 01db0f64 adrp x21, #0x4185000
+01dae780 ldr x22, [x22, #0x2b8] -> 01db0f6c ldr x22, [x22, #0x6a0]
+01dae784 ldr x21, [x21, #0xe88] -> 01db0f70 ldr x21, [x21, #0x2c8]
+01dae78c bl #0x1b623f4 -> 01db0f78 bl #0x1b646c4
+01dae79c bl #0x1cc4300 -> 01db0f88 bl #0x1cc614c
+01dae7a8 bl #0x3301360 -> 01db0f94 bl #0x3308300
+01dae7d4 adrp x8, #0x4180000 -> 01db0fc0 adrp x8, #0x4187000
+01dae7d8 ldr x8, [x8, #0x6d0] -> 01db0fc4 ldr x8, [x8, #0xab0]
+01dae7e4 bl #0x32f3d14 -> 01db0fd0 bl #0x32facb4
+01dae7e8 adrp x21, #0x417f000 -> 01db0fd4 adrp x21, #0x4186000
+01dae7f0 ldr x21, [x21, #0xaa8] -> 01db0fdc ldr x21, [x21, #0xee8]
+01dae80c adrp x9, #0x4180000 -> 01db0ff8 adrp x9, #0x4187000
+01dae818 ldr x9, [x9, #0x818] -> 01db1004 ldr x9, [x9, #0xc00]
+01dae824 bl #0x3301360 -> 01db1010 bl #0x3308300
+01dae838 adrp x22, #0x446e000 -> 01db1024 adrp x22, #0x4475000
+01dae83c ldrb w8, [x22, #0x332] -> 01db1028 ldrb w8, [x22, #0x8c0]
+01dae844 adrp x0, #0x417f000 -> 01db1030 adrp x0, #0x4186000
+01dae848 ldr x0, [x0, #0xaa8] -> 01db1034 ldr x0, [x0, #0xee8]
+01dae84c bl #0x1b622c0 -> 01db1038 bl #0x1b64590
+01dae854 strb w8, [x22, #0x332] -> 01db1040 strb w8, [x22, #0x8c0]
+01dae870 adrp x21, #0x4180000 -> 01db105c adrp x21, #0x4187000
+01dae874 adrp x22, #0x4180000 -> 01db1060 adrp x22, #0x4187000
+01dae878 ldr x21, [x21, #0x768] -> 01db1064 ldr x21, [x21, #0xb48]
+01dae87c ldr x22, [x22, #0x770] -> 01db1068 ldr x22, [x22, #0xb50]
+01dae884 bl #0x1cb98dc -> 01db1070 bl #0x1cbb728
+01dae894 bl #0x1b62508 -> 01db1080 bl #0x1b647d8
+01dae8a0 bl #0x2e4eeb4 -> 01db108c bl #0x2e5f4ac
+01dae8b0 adrp x24, #0x4180000 -> 01db109c adrp x24, #0x4187000
+01dae8b4 adrp x25, #0x4180000 -> 01db10a0 adrp x25, #0x4187000
+01dae8b8 ldr x24, [x24, #0x640] -> 01db10a4 ldr x24, [x24, #0xa20]
+01dae8bc ldr x25, [x25, #0x778] -> 01db10a8 ldr x25, [x25, #0xb58]
+01dae8e4 bl #0x2e4f3bc -> 01db10d0 bl #0x2e5f9b4
+01dae93c bl #0x2e4f680 -> 01db1128 bl #0x2e5fc78
+01dae94c bl #0x1b62518 -> 01db1138 bl #0x1b647e8
+01dae970 bl #0x1b62520 -> 01db115c bl #0x1b647f0

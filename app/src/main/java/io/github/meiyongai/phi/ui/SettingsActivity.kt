@@ -33,7 +33,7 @@ class SettingsActivity : Activity() {
         }
 
         val titleView = TextView(this).apply {
-            text = "phi - Phigros 4.0.1 辅助模块"
+            text = "phi - Phigros 4.0.1.2 辅助模块"
             setTextColor(Color.WHITE)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
             gravity = Gravity.CENTER

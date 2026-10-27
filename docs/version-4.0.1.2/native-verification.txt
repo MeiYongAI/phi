@@ -1,0 +1,80 @@
+Phigros 4.0.1.2 / versionCode 160 / arm64-v8a
+SHA256: c5f6d6b72658ab6d5f03d3d11a63b47778c54d4b93871422218d6a75f7b4a10f
+
+MoneyControl.SpendMoney @ 0x1cac2f4; original=fe57bea9f44f01a9
+  01cac2f4: mov w0, #1
+  01cac2f8: ret
+
+ClickControl.TimeGuard @ 0x1d848ec; original=1f1d00726882013920070054
+  01d848ec: fmov s0, wzr
+  01d848f0: fcmp s9, s0
+  01d848f4: b.gt #0x1d849d8
+
+ClickControl.NoFabs @ 0x1d848fc; original=28c1201e
+  01d848fc: fmov s8, wzr
+
+ClickControl.LoadZero @ 0x1d84914; original=000540bd
+  01d84914: fmov s0, wzr
+
+ClickControl.PassThrough @ 0x1d8491c; original=e5090054
+  01d8491c: nop
+
+DragControl.LoadZero @ 0x1d850f8; original=002945bd
+  01d850f8: fmov s0, wzr
+
+DragControl.PassThrough @ 0x1d8510c; original=e8050034
+  01d8510c: nop
+
+FlickControl.LoadZero @ 0x1d85670; original=422945bd
+  01d85670: fmov s2, wzr
+
+FlickControl.PassThrough @ 0x1d8568c; original=a0070054
+  01d8568c: nop
+
+HoldControl.HeadPassThrough @ 0x1d8633c; original=a0030054
+  01d8633c: nop
+
+HoldControl.NoFabs @ 0x1d86344; original=09c1201e
+  01d86344: fmov s9, s8
+
+HoldControl.LoadZero @ 0x1d8635c; original=000540bd
+  01d8635c: fmov s0, wzr
+
+HoldControl.HeadRedirectWait @ 0x1d86364; original=85050054
+  01d86364: b.pl #0x1d865c8
+
+HoldControl.PreventBroken @ 0x1d865e8; original=69360239
+  01d865e8: strb wzr, [x19, #0x8d]
+
+HoldControl.BodySkipToTail @ 0x1d865ec; original=081000b4
+  01d865ec: b #0x1d866a4
+
+ProgressControl.BypassAudioWait @ 0x1d88880; original=ad010054
+  01d88880: nop
+
+ProgressControl.BypassCanLevelOver @ 0x1d88890; original=28010034
+  01d88890: nop
+
+ProgressControl.SetOverTimeDirectly @ 0x1d888d4; original=0029201e
+  01d888d4: fmov s0, #3.50000000
+
+ScoreControl.InstantPhiResult @ 0x1d88b78; original=604240bde00314aae1031faae5e0fc97604640bde00314aae1031faafbe0fc97685640b9883600b96082c53c80c2813c603640fd80c202fc
+  01d88b78: ldr x8, [x19, #0x30]
+  01d88b7c: ldr w8, [x8, #0x2c]
+  01d88b80: mov w9, #0x2400
+  01d88b84: movk w9, #0x4974, lsl #16
+  01d88b88: mov w10, #0x4240
+  01d88b8c: movk w10, #0xf, lsl #16
+  01d88b90: stp w10, w9, [x20, #0x10]
+  01d88b94: mov w9, #0x3f800000
+  01d88b98: stp w9, w8, [x20, #0x18]
+  01d88b9c: str xzr, [x20, #0x20]
+  01d88ba0: str xzr, [x20, #0x28]
+  01d88ba4: stp wzr, w8, [x20, #0x30]
+  01d88ba8: nop
+  01d88bac: nop
+
+SongSelectorItem.SetZeroPrice @ 0x1db0f10; original=0011891a
+  01db0f10: mov w0, wzr
+
+PASS: 20 modification sites; branch targets and field operands verified.

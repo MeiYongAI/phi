@@ -16,7 +16,6 @@ object ConfigManager {
     private const val KEY_FREE_PURCHASE = "key_free_purchase"
     private const val KEY_FAST_PASS = "key_fast_pass"
     private const val KEY_SECURE_SCREEN = "key_secure_screen"
-    private const val KEY_BUBBLE_ALPHA = "key_bubble_alpha"
 
     private lateinit var preferences: SharedPreferences
 
@@ -48,7 +47,7 @@ object ConfigManager {
      *     Boolean: true 为已保存启用状态，false 为未启用（默认值 false）。
      *
      * Callers:
-     *     - `PhigrosHook.onGameActivityCreated`: 启动时按持久配置自动应用补丁。
+     *     - `PhigrosHook.onGameActivityCreated`: 启动时按持久配置启用原生功能。
      *     - `FloatPanelView.init`: 初始化自动打歌开关状态。
      */
     fun isAutoPlayEnabled(): Boolean {
@@ -81,7 +80,7 @@ object ConfigManager {
      *     Boolean: true 为已保存启用状态，false 为未启用（默认值 false）。
      *
      * Callers:
-     *     - `PhigrosHook.onGameActivityCreated`: 启动时按持久配置自动应用补丁。
+     *     - `PhigrosHook.onGameActivityCreated`: 启动时按持久配置启用原生功能。
      *     - `FloatPanelView.init`: 初始化零元购开关状态。
      */
     fun isFreePurchaseEnabled(): Boolean {
@@ -114,7 +113,7 @@ object ConfigManager {
      *     Boolean: true 为已保存启用状态，false 为未启用（默认值 false）。
      *
      * Callers:
-     *     - `PhigrosHook.onGameActivityCreated`: 启动时按持久配置自动应用补丁。
+     *     - `PhigrosHook.onGameActivityCreated`: 启动时按持久配置启用原生功能。
      *     - `FloatPanelView.init`: 初始化一键通关开关状态。
      */
     fun isFastPassEnabled(): Boolean {
@@ -168,38 +167,5 @@ object ConfigManager {
      */
     fun setSecureScreenEnabled(enabled: Boolean) {
         preferences.edit().putBoolean(KEY_SECURE_SCREEN, enabled).apply()
-    }
-
-    /**
-     * 查询悬浮球透明度持久化配置
-     *
-     * Args:
-     *     无
-     *
-     * Returns:
-     *     Float: 透明度浮点值（0.2f - 1.0f，默认值 0.85f）。
-     *
-     * Callers:
-     *     - `PhigrosHook.onGameActivityCreated`: 启动时按持久配置调整悬浮球透明度。
-     *     - `FloatPanelView.init`: 初始化透明度调节滑动条数值。
-     */
-    fun getBubbleAlpha(): Float {
-        return preferences.getFloat(KEY_BUBBLE_ALPHA, 0.85f)
-    }
-
-    /**
-     * 保存悬浮球透明度配置
-     *
-     * Args:
-     *     alpha (Float): 目标透明度浮点值。
-     *
-     * Returns:
-     *     Unit
-     *
-     * Callers:
-     *     - `FloatPanelView.init`: 响应透明度滑动条数值变动。
-     */
-    fun setBubbleAlpha(alpha: Float) {
-        preferences.edit().putFloat(KEY_BUBBLE_ALPHA, alpha).apply()
     }
 }

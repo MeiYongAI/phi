@@ -33,7 +33,7 @@ class SettingsActivity : Activity() {
         }
 
         val titleView = TextView(this).apply {
-            text = "phi - Phigros 4.0.1.2 辅助模块"
+            text = "phi - Phigros 辅助模块"
             setTextColor(Color.WHITE)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
             gravity = Gravity.CENTER
@@ -41,7 +41,7 @@ class SettingsActivity : Activity() {
         rootLayout.addView(titleView)
 
         val descView = TextView(this).apply {
-            text = "模块已就绪。\n\n请在 LSPosed 作用域中确认勾选《Phigros》，进入游戏后左侧将自动展示游戏内悬浮交互按钮。\n\n支持零延迟全 Perfect 自动打歌与防截屏录屏保护。"
+            text = "模块已就绪。\n\n请在 LSPosed 作用域中确认勾选《Phigros》，进入游戏后左侧将自动展示游戏内悬浮交互按钮。\n\n支持自动打歌、一键通关、零元购及截屏/录屏忽略浮窗。"
             setTextColor(Color.parseColor("#A0A0B8"))
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             gravity = Gravity.CENTER

@@ -37,7 +37,6 @@ class FloatWindowManager(private val activity: Activity) {
 
     private var isPanelExpanded: Boolean = false
     private var isSecureEnabled: Boolean = ConfigManager.isSecureScreenEnabled()
-    private var bubbleAlpha: Float = ConfigManager.getBubbleAlpha()
 
     init {
         // 构建悬浮球视图：半透明圆形质感按钮
@@ -49,7 +48,6 @@ class FloatWindowManager(private val activity: Activity) {
                 setStroke(dpToPx(2), Color.parseColor("#8888AAFF"))
             }
             background = bubbleDrawable
-            alpha = bubbleAlpha
 
             val label = object : View(activity) {
                 private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -83,7 +81,6 @@ class FloatWindowManager(private val activity: Activity) {
             height = dpToPx(52)
             x = dpToPx(20)
             y = dpToPx(120)
-            alpha = bubbleAlpha
         }
 
         // 悬浮球拖拽与点击判定
@@ -251,31 +248,6 @@ class FloatWindowManager(private val activity: Activity) {
      */
     fun isSecureScreenEnabled(): Boolean {
         return isSecureEnabled
-    }
-
-    /**
-     * 调节悬浮球透明度
-     *
-     * @param alpha 透明度浮点值 (0.2f - 1.0f)
-     * @see io.github.meiyongai.phi.ui.FloatPanelView
-     */
-    fun setBubbleAlpha(alpha: Float) {
-        bubbleAlpha = alpha.coerceIn(0.2f, 1.0f)
-        bubbleParams.alpha = bubbleAlpha
-        bubbleView.alpha = bubbleAlpha
-        if (bubbleView.parent != null) {
-            windowManager.updateViewLayout(bubbleView, bubbleParams)
-        }
-    }
-
-    /**
-     * 获取当前悬浮球透明度
-     *
-     * @return 当前透明度浮点值
-     * @see io.github.meiyongai.phi.ui.FloatPanelView
-     */
-    fun getBubbleAlpha(): Float {
-        return bubbleAlpha
     }
 
     /**

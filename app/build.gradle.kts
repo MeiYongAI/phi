@@ -8,13 +8,25 @@ plugins {
 android {
     namespace = "io.github.meiyongai.phi"
     compileSdk = 34
+    ndkVersion = "27.0.12077973"
 
     defaultConfig {
         applicationId = "io.github.meiyongai.phi"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.2.0"
+        versionCode = 4
+        versionName = "2.0.0"
+        ndk { abiFilters += "arm64-v8a" }
+        externalNativeBuild {
+            cmake { arguments += "-DANDROID_STL=c++_static" }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
     }
 
     val releaseSigningPropertiesFile = rootProject.file("keystore/keystore.properties")
@@ -69,5 +81,4 @@ dependencies {
     compileOnly(libs.libxposed.api)
     compileOnly(libs.libxposed.service)
     implementation(libs.androidx.core.ktx)
-    implementation("net.java.dev.jna:jna:5.16.0@aar")
 }

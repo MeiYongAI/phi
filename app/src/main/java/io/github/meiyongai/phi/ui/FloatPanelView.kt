@@ -9,17 +9,16 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import android.widget.SeekBar
 import android.widget.Switch
 import android.widget.TextView
 import io.github.meiyongai.phi.config.ConfigManager
-import io.github.meiyongai.phi.patcher.MemoryPatcher
+import io.github.meiyongai.phi.nativebridge.NativeGame
 
 /**
  * 游戏内控制面板视图
  *
  * 以纯代码方式构建现代暗色半透明风格的控制面板，
- * 负责提供自动打歌功能切换、一键通关切换、防截屏录屏保护开关以及悬浮按钮外观调节等交互功能。
+ * 负责提供自动打歌、一键通关、零元购与截屏录屏忽略浮窗的功能开关。
  *
  * @param context 当前运行宿主的上下文环境
  * @param windowManager 悬浮窗管理器，用于协同状态变更
@@ -34,7 +33,6 @@ class FloatPanelView(
     private val fastPassSwitch: Switch
     private val freePurchaseSwitch: Switch
     private val secureScreenSwitch: Switch
-    private val alphaSeekBar: SeekBar
 
     init {
         orientation = VERTICAL
@@ -58,7 +56,7 @@ class FloatPanelView(
 
         val titleTextView = TextView(context).apply {
             id = View.generateViewId()
-            text = "phi 4.0.1.2"
+            text = "phi"
             setTextColor(Color.WHITE)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 17f)
             typeface = Typeface.DEFAULT_BOLD
@@ -102,9 +100,9 @@ class FloatPanelView(
             text = "自动打歌"
             setTextColor(Color.WHITE)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
-            isChecked = MemoryPatcher.isAutoPlayEnabled()
+            isChecked = NativeGame.isAutoPlayEnabled()
             setOnCheckedChangeListener { _, isChecked ->
-                MemoryPatcher.setAutoPlayEnabled(isChecked)
+                NativeGame.setAutoPlayEnabled(isChecked)
                 ConfigManager.setAutoPlayEnabled(isChecked)
             }
         }
@@ -115,9 +113,9 @@ class FloatPanelView(
             text = "一键通关"
             setTextColor(Color.WHITE)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
-            isChecked = MemoryPatcher.isFastPassEnabled()
+            isChecked = NativeGame.isFastPassEnabled()
             setOnCheckedChangeListener { _, isChecked ->
-                MemoryPatcher.setFastPassEnabled(isChecked)
+                NativeGame.setFastPassEnabled(isChecked)
                 ConfigManager.setFastPassEnabled(isChecked)
             }
         }
@@ -128,9 +126,9 @@ class FloatPanelView(
             text = "零元购"
             setTextColor(Color.WHITE)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
-            isChecked = MemoryPatcher.isFreePurchaseEnabled()
+            isChecked = NativeGame.isFreePurchaseEnabled()
             setOnCheckedChangeListener { _, isChecked ->
-                MemoryPatcher.setFreePurchaseEnabled(isChecked)
+                NativeGame.setFreePurchaseEnabled(isChecked)
                 ConfigManager.setFreePurchaseEnabled(isChecked)
             }
         }
@@ -149,39 +147,6 @@ class FloatPanelView(
         }
         addView(createRowContainer(secureScreenSwitch))
 
-        // 悬浮球透明度调节
-        val alphaLabel = TextView(context).apply {
-            text = "悬浮球透明度"
-            setTextColor(Color.WHITE)
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
-            setPadding(0, dpToPx(8), 0, dpToPx(4))
-        }
-        addView(alphaLabel)
-
-        alphaSeekBar = SeekBar(context).apply {
-            max = 100
-            progress = (windowManager.getBubbleAlpha() * 100).toInt()
-            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                /**
-                 * 进度条变动监听
-                 *
-                 * @param seekBar 目标进度条
-                 * @param progress 当前数值 (0-100)
-                 * @param fromUser 是否来自用户主动滑动
-                 */
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    val alpha = (progress.coerceAtLeast(20)) / 100f
-                    windowManager.setBubbleAlpha(alpha)
-                    if (fromUser) {
-                        ConfigManager.setBubbleAlpha(alpha)
-                    }
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-            })
-        }
-        addView(alphaSeekBar)
     }
 
     /**

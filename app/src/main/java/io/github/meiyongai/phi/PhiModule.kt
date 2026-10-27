@@ -9,6 +9,7 @@ import io.github.libxposed.api.XposedInterface.Hooker
 import io.github.libxposed.api.XposedModule
 import io.github.libxposed.api.XposedModuleInterface.PackageLoadedParam
 import io.github.meiyongai.phi.hook.PhigrosHook
+import io.github.meiyongai.phi.nativebridge.NativeGame
 
 /**
  * phi 模块主入口
@@ -39,6 +40,8 @@ class PhiModule : XposedModule() {
         }
 
         Log.i(TAG, "已成功挂载至目标游戏进程: ${param.packageName}")
+        // Register native library callbacks before Unity loads libil2cpp.so.
+        NativeGame.load()
 
         // 挂钩 Activity.onPostCreate 方法
         val onPostCreateMethod = Activity::class.java.getDeclaredMethod("onPostCreate", Bundle::class.java)

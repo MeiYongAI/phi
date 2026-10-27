@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.22.1)
+project(phi LANGUAGES CXX)
+add_library(phi SHARED il2cpp.cpp game.cpp entry.cpp)
+target_compile_features(phi PRIVATE cxx_std_20)
+target_compile_options(phi PRIVATE -Wall -Wextra -Werror -fvisibility=hidden)
+target_link_options(phi PRIVATE -Wl,-z,max-page-size=16384)
+target_link_libraries(phi PRIVATE android log dl)
